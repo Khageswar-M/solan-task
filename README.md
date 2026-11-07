@@ -1,5 +1,12 @@
 ## Environment Setup and Execution from Scratch
 
+## Execution Result
+
+The following screenshot demonstrates the successful execution
+of the Substreams module against the required Solana blocks.
+
+![Substreams Execution Output](images/substreams-output.png)
+
 ### Prerequisites
 
 Install the following software on your host machine:
