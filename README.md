@@ -5,7 +5,7 @@
 The following screenshot demonstrates the successful execution
 of the Substreams module against the required Solana blocks.
 
-![Substreams Execution Output](images/substreams-output.png)
+![Substreams Execution Output](https://github.com/Khageswar-M/solan-task/blob/main/images/Screenshot%202026-11-07%20111822.png)
 
 ### Prerequisites
 
