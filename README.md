@@ -1,76 +1,67 @@
-# Solana Transfer Extractor
+## Environment Setup and Execution from Scratch
 
-## Project Overview
+### Prerequisites
 
-A Rust-based Substreams module that processes Solana blockchain transactions and extracts transfer instructions.
+Install the following software on your host machine:
 
-## Assessment Requirements
+1. Docker Desktop
+2. Visual Studio Code
+3. VS Code Dev Containers extension
 
-- Blockchain: Solana Mainnet
-- Start block: `385870151`
-- End block: `385870156`
-- Output fields:
-  - `from`: Sender wallet address (Base58)
-  - `to`: Recipient wallet address (Base58)
-  - `amount`: Transfer amount
+No local Rust installation or Substreams CLI installation is required. These tools are configured inside the Docker development container.
 
-## Technology Stack
+### Step 1: Extract the Project
 
-- Rust
-- Substreams
-- Solana
-- Protocol Buffers
-- Docker
-- VS Code Dev Containers
-- Pinax Substreams Provider
+Download and extract `solana-transfer-extractor.zip`.
 
-## Project Structure
+Open the extracted `solana_transfer_extractor` folder in VS Code.
 
-- `src/lib.rs` – Rust transfer extraction logic
-- `proto/mydata.proto` – Protobuf output definitions
-- `substreams.yaml` – Substreams module manifest
-- `Cargo.toml` – Rust dependencies
-- `Cargo.lock` – Locked dependency versions
-- `buf.gen.yaml` – Protobuf code generation configuration
-- `solana-transfer-extractor-v0.1.0.spkg` – Compiled Substreams package
+### Step 2: Start the Development Container
 
-## Environment Setup
+Make sure Docker Desktop is running.
 
-1. Install Docker Desktop.
-2. Install Visual Studio Code.
-3. Install the VS Code Dev Containers extension.
-4. Open this project in VS Code.
-5. Select **Reopen in Container** when prompted.
+In VS Code:
 
-Rust and the Substreams CLI are configured inside the development container.
+1. Open the Command Palette (`Ctrl + Shift + P`).
+2. Select **Dev Containers: Reopen in Container**.
+3. Wait for Docker to build the development environment and initialize the container.
 
-## API Configuration
+The development environment installs and configures Rust, the WebAssembly target, Buf, and the Substreams CLI.
 
-A Pinax API key is required to access the Solana Substreams endpoint.
+### Step 3: Verify the Environment
 
-Set the key inside the development container:
+Open the VS Code integrated terminal and run:
+
+```bash
+rustc --version
+cargo --version
+substreams --version
+buf --version
+```
+
+### Step 4: Configure the Pinax API Key
+
+Set your Pinax API key inside the container:
 
 ```bash
 export SUBSTREAMS_API_KEY="YOUR_PINAX_API_KEY"
 ```
 
-Do not commit or share your actual API key.
+You must set this again when opening a new terminal session unless you configure it through another secure environment-variable mechanism.
 
-## Build the Package
+### Step 5: Build the Substreams Package
 
-Run:
+From the project root, execute:
 
 ```bash
 substreams build
 ```
 
-The command generates:
+This compiles the Rust module and generates the SPKG package.
 
-`solana-transfer-extractor-v0.1.0.spkg`
+### Step 6: Execute the Substreams
 
-## Execute the Substreams
-
-Run the module against the six required blocks:
+Run:
 
 ```bash
 substreams run \
@@ -81,29 +72,16 @@ substreams run \
   -t +6
 ```
 
-## Supported Transfer Instructions
+The command processes blocks 385870151 through 385870156.
 
-The current implementation handles:
+The extracted transfer records are displayed in the terminal.
 
-- Native SOL transfers
-- SPL Token transfers
-- Token-2022 transfers
-- Supported transfers in inner instructions (CPI)
+### Step 7: Verify the Output
 
-Failed transactions are ignored.
+Check that each extracted transfer contains:
 
-For SPL token transfers, wallet owners are resolved using transaction token-balance metadata.
+- `from`: Sender wallet address
+- `to`: Recipient wallet address
+- `amount`: Transfer amount in the smallest unit of the asset
 
-## Output
-
-Each extracted transfer contains the sender address, recipient address, and integer amount.
-
-The amount is represented in the smallest unit of the respective asset:
-- SOL: lamports
-- SPL tokens: raw token units
-
-## Compiled Package
-
-`solana-transfer-extractor-v0.1.0.spkg`
-
-The examiner can rebuild the package using the source code and the build command above.
+Multiple transfers are represented as separate transfer records.
